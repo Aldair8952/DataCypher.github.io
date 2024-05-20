@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de IP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        .content {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        .result {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Consultas</h1>
+    </header>
+    <div class="container">
+        <div class="content">
+            <h2>Consultar Información de IP</h2>
+            <form id="queryForm">
+                <div class="form-group">
+                    <label for="ipAddress">Dirección IP</label>
+                    <input type="text" id="ipAddress" name="ipAddress" placeholder="Introduce una dirección IP">
+                </div>
+                <button type="submit">Consultar</button>
+            </form>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('queryForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var ipAddress = document.getElementById('ipAddress').value;
+            var apiKey = '50b1b31401004f57bba9d088fa1d1c9f'; // Reemplaza 'tu_api_key' con tu propia API Key de IP Geolocation
+            var apiUrl = 'https://api.ipgeolocation.io/ipgeo?apiKey=' + apiKey + '&ip=' + ipAddress;
+
+            fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                var result = `
+                        <p><strong>IP:</strong> ${data.ip}</p>
+                        <p><strong>Continente:</strong> ${data.continent_name}</p>
+                        <p><strong>País:</strong> ${data.country_name}</p>
+                        <p><strong>Region:</strong> ${data.country_capital}</p>
+                        <p><strong>Provincia:</strong> ${data.state_prov}</p>
+                        <p><strong>Distrito:</strong> ${data.district}</p>
+                        <p><strong>Ciudad:</strong> ${data.city}</p>
+                        <p><strong>ISP:</strong> ${data.isp}</p>
+                        <p><strong>ORG:</strong> ${data.organization}</p>
+                        <p><strong>AS:</strong> ${data.as}</p>
+                        <p><strong>Latitud:</strong> ${data.latitude}</p>
+                        <p><strong>Longitud:</strong> ${data.longitude}</p>
+                        <p><strong>Codigo postal:</strong> ${data.calling_code}</p>
+                `;
+                document.getElementById('result').innerHTML = result;
+            })
+            .catch(error => {
+                console.error('Error al realizar la consulta:', error);
+                document.getElementById('result').innerHTML = '<p>Ocurrió un error al realizar la consulta. Por favor, intenta nuevamente.</p>';
+            });
+        });
+    </script>
+</body>
+</html>
